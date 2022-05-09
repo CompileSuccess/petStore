@@ -1,11 +1,15 @@
 package com.petStore.step_definitions;
 
+import com.petStore.pojo.Category;
+import com.petStore.pojo.Pet;
 import com.petStore.utilities.PetStoreUtils;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.Assert;
+
+import java.util.Arrays;
 
 import static io.restassured.RestAssured.*;
 
@@ -42,4 +46,45 @@ PetStoreUtils url =new PetStoreUtils();
                         .when()
                         .get(url.url() + endpoint);
     }
+
+    @Given("user sends post request to the right url {string} endpoint")
+    public void userSendsPostRequestToTheRightUrlEndpoint(String endpoint) {
+        Category category = new Category();
+        category.setId(120);
+        category.setName("Persian");
+
+        Pet newPet = new Pet();
+        newPet.setName("Cat");
+        newPet.setId(120);
+        newPet.setCategory(category);
+        newPet.setPhotoUrls(Arrays.asList("url"));
+        newPet.setStatus("Good");
+
+        response =
+                given()
+                        .accept(ContentType.JSON)
+                        .and().contentType(ContentType.JSON)
+                        .body(newPet)
+                        .when()
+                        .post(url.url() + endpoint);
+
+
+
+
+    }
+
+    @Given("user send a delete request to the right url {string} endpoint with path param with id {int}")
+    public void userSendADeleteRequestToTheRightUrlEndpointWithPathParamWithId(String endpoint, int ID) {
+        response =
+                given().log().all()
+                        .accept(ContentType.JSON)
+                        .header("api_key",12345)
+                        .pathParam("petID",ID)
+                        .when()
+                        .delete(url.url() + endpoint);
+        response.prettyPrint();
+
+    }
+
+
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class pet {
+public class Pet {
 
     private long id;
             private Category category;
